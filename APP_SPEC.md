@@ -50,6 +50,9 @@ A successful session is:
 - Keep the encoding selector in file information rather than the initial empty state.
 - Memo cells show a compact reference in the table. Clicking the cell reads the corresponding memo block on demand from DBT or FPT.
 - CSV export/copy uses the currently visible preview page and current deleted-row visibility. Memo values are resolved for the exported page when a companion memo file is attached.
+- CSV copy/download is disabled while the requested page is loading or failed; direct calls also reject non-current rows. A successfully loaded empty page exports its header only.
+- Every page request owns its success, error and cleanup. Older requests, closed tabs and old source/encoding contexts cannot mutate the current page or ready state.
+- CSV snapshots the visible fields, sorted/filtered rows, deleted flags, cell values, memo file/kind, encoding and edited filename before asynchronous work. Switching pages or tabs preserves that captured export; closing its source or requesting a newer export from the same file cancels delivery that has not yet been handed to the browser; already requested native clipboard writes cannot be recalled. Old completion/error notifications never replace current-page feedback.
 - Output filename is user-editable before CSV download. `.csv` is appended automatically.
 - Japanese and English are available without reload.
 - Help describes actual supported behavior, privacy, memo limitations, and read-only scope.

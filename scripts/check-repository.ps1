@@ -242,3 +242,7 @@ if (-not $webrtcReadyText.Contains("options.requireReadyChannelOpen!==false&&(!r
   throw "WebRTC application-ready must wait for the designated DataChannel to open."
 }
 
+
+# Run the DBF behavioral regressions against every distribution after the build.
+& node (Join-Path $Root "tests/run-tests.cjs")
+if ($LASTEXITCODE -ne 0) { throw "DBF regression tests failed." }

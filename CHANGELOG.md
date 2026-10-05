@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Keep CSV actions unavailable until the requested page is ready, and reject stale page data.
+- Prevent older successful/failed reads from clearing a newer loading state or replacing its rows/errors.
+- Capture CSV rows, visible fields, memo source, encoding and edited filename before asynchronous work; cancel closed/superseded exports and suppress stale notifications.
+- Add deterministic page/export regressions for source and all generated distributions.
+
 ## v1.0.0 - 2026-09-04
 
 - First stable release.
