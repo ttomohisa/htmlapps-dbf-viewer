@@ -7,7 +7,7 @@ const test = require('node:test');
 // Execute the production parser/state/export functions, with only DOM output and
 // clipboard/download delivery stubbed. Fixtures are tiny, synthetic local files.
 const source = fs.readFileSync(process.env.DBF_TEST_HTML || path.join(__dirname, '../src/index.template.html'), 'utf8');
-const names = ['basename','extension','uniqueId','safeTextDecoder','decodeText','decodeAscii','isAllZero','parseDbfHeader','getActiveEncoding','parseMemoReference','parseFieldValue','readPage','readMemo','getActiveFile','buildFileState','activateFile','closeFile','visibleRows','renderDataLoading','renderPagination','resolveCellForCsv','csvEscape','buildCurrentCsv','normalizedFilenameBase','copyCsv','downloadCsv','pageContext','isCurrentPageContext','isPageReady','refreshCsvActions','createCsvSnapshot','isCsvSnapshotLive','isCsvSnapshotCurrent','buildCsv'];
+const names = ['closeCell','basename','extension','uniqueId','safeTextDecoder','decodeText','decodeAscii','isAllZero','parseDbfHeader','getActiveEncoding','parseMemoReference','parseFieldValue','readPage','readMemo','getActiveFile','buildFileState','activateFile','closeFile','visibleRows','renderDataLoading','renderPagination','resolveCellForCsv','csvEscape','buildCurrentCsv','normalizedFilenameBase','copyCsv','downloadCsv','pageContext','isCurrentPageContext','isPageReady','refreshCsvActions','createCsvSnapshot','isCsvSnapshotLive','isCsvSnapshotCurrent','buildCsv'];
 function extract(name) {
   const match = new RegExp('^      (?:async )?function ' + name + '\\(', 'm').exec(source);
   if (!match) return ''; // New helpers are absent on the intentionally failing baseline.

@@ -311,6 +311,8 @@
     .dialog-body p,.dialog-body li { color: var(--muted); font-size: 12px; line-height: 1.75; }
     .dialog-body ul,.dialog-body ol { padding-left: 21px; }
     .dialog-note { padding: 10px 11px; border: 1px solid color-mix(in srgb,var(--accent) 22%,var(--line)); border-radius: 10px; background: var(--accent-soft); color: var(--text) !important; }
+    .cell-navigation { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+    .cell-navigation .button { flex: 1 1 120px; }
     .cell-meta { display: grid; grid-template-columns: 105px minmax(0,1fr); gap: 8px 12px; padding-bottom: 13px; border-bottom: 1px solid var(--line); }
     .cell-meta dt { color: var(--muted); font-size: 11px; }
     .cell-meta dd { margin: 0; min-width: 0; font-size: 12px; font-weight: 650; overflow-wrap: anywhere; }
@@ -601,7 +603,7 @@
       <ol>
         <li data-i18n="helpStep1">DBFファイルを選択またはドロップします。DBT / FPTがある場合は一緒に追加できます。</li>
         <li data-i18n="helpStep2">ファイル情報とフィールド構成を確認し、データをページ単位で移動します。</li>
-        <li data-i18n="helpStep3">文字化けする場合はファイル情報の文字コードを変更します。セルをクリックすると完全な値を確認できます。</li>
+        <li data-i18n="helpStep3">文字化けする場合はファイル情報の文字コードを変更します。セルをクリックすると完全な値を確認できます。「前のレコード」「次のレコード」で同じフィールドを現在ページの表示順に確認できます。削除済みの表示設定に従い、ページの端で止まります。</li>
         <li data-i18n="helpStep4">必要なページを表示した状態で、現在ページをCSVとしてコピーまたは保存できます。</li>
       </ol>
       <h3 data-i18n="helpPrivacyTitle">プライバシー</h3>
@@ -623,8 +625,13 @@
     <div class="dialog-header"><h2 id="cellDialogTitle" data-i18n="cellDetails">セルの内容</h2><button class="icon-button" id="closeCellButton" type="button" data-i18n-aria-label="close" aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
     <div class="dialog-body">
       <dl class="cell-meta"><dt data-i18n="recordLabel">レコード</dt><dd id="cellRecord"></dd><dt data-i18n="fieldLabel">フィールド</dt><dd id="cellField"></dd><dt data-i18n="typeLabel">型</dt><dd id="cellType"></dd></dl>
+      <div class="cell-navigation">
+        <button class="button" id="prevCellButton" type="button" disabled data-i18n="previousRecord">前のレコード</button>
+        <button class="button" id="nextCellButton" type="button" disabled data-i18n="nextRecord">次のレコード</button>
+      </div>
+      <p class="dialog-note" id="cellPosition" aria-live="polite"></p>
       <div class="cell-value-box" id="cellValue"></div>
-      <div class="dialog-actions"><button class="button" id="copyCellButton" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span data-i18n="copyValue">値をコピー</span></button></div>
+      <div class="dialog-actions"><button class="button" id="copyCellButton" type="button" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span data-i18n="copyValue">値をコピー</span></button></div>
     </div>
   </dialog>
 
@@ -638,7 +645,7 @@
       'use strict';
 
       const APP_CONFIG = {"$schema":"./schemas/app-config.schema.json","name":"DBF Viewer","nameJa":"DBF Viewer","slug":"dbf-viewer","version":"1.0.0","description":"Open DBF files locally in your browser and inspect fields, records, encoding, and memo data.","descriptionJa":"DBFファイルをブラウザー内で開き、フィールド構成・レコード・文字コード・メモデータを確認します。","defaultLanguage":"auto","repository":{"owner":"ttomohisa","name":"htmlapps-dbf-viewer"},"build":{"output":"dist/index.html","blockRuntimeNetwork":true,"selfExtract":{"enabled":true,"output":"dist/index.self-extract.html"},"sizeBudget":{"readableWarningMb":10,"selfExtractWarningMb":6}}};
-      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.2","generatedAtUtc":"2026-10-05T10:43:06.2645515Z","app":{"name":"DBF Viewer","slug":"dbf-viewer","version":"1.0.0"},"dependencies":[]};
+      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.2","generatedAtUtc":"2026-10-05T20:05:50.7678255Z","app":{"name":"DBF Viewer","slug":"dbf-viewer","version":"1.0.0"},"dependencies":[]};
       const assetBundle = {"schemaVersion":2,"dependencies":{}};
       const blobUrls = new Set();
       const assetByteCache = new Map();
@@ -678,9 +685,9 @@
       const translations = {
         ja: {
           brandMeta: 'DBFをブラウザー内で確認', introTitle: 'DBFファイルを開いて中身を確認', lead: 'フィールド構成やレコードをブラウザー内で確認します。文字化けした場合は文字コードを切り替えられます。', localBadge: '完全ローカル処理',
-          helpTitle: '使い方と注意事項', close: '閉じる', helpBasicsTitle: '基本操作', helpStep1: 'DBFファイルを選択またはドロップします。DBT / FPTがある場合は一緒に追加できます。', helpStep2: 'ファイル情報とフィールド構成を確認し、データをページ単位で移動します。', helpStep3: '文字化けする場合はファイル情報の文字コードを変更します。セルをクリックすると完全な値を確認できます。', helpStep4: '必要なページを表示した状態で、現在ページをCSVとしてコピーまたは保存できます。', helpPrivacyTitle: 'プライバシー', helpPrivacyBody: 'DBF / DBT / FPTはブラウザー内だけで読み取ります。このアプリから外部サーバーへ送信しません。', helpNotesTitle: '注意事項', helpNoteReadOnly: '閲覧専用です。元のDBFやメモファイルを書き換えません。', helpNoteCsv: 'CSV出力は読み込みが完了した現在ページが対象です。処理中や読み込みエラー時は利用できません。出力開始時の列・行・文字コード・メモ・ファイル名を保持します。タブやページを切り替えても開始済みの出力はその内容で完了します。元のタブを閉じるか同じファイルで新しい出力を開始すると、ブラウザーに渡す前の未完了の出力を中止します。', helpNoteMemo: 'メモフィールドの内容には同名のDBT / FPTが必要な場合があります。メモファイルがなくてもDBF本体は確認できます。', helpNoteDialect: 'DBFには複数の方言があります。未知のフィールド型や特殊なメモ形式は完全には表示できない場合があります。', helpNoteIndexes: 'NDX / MDX / CDXなどのインデックスファイルは使用しません。', helpOffline: '配布用HTMLは実行時の外部通信を必要とせず、ローカルファイルとして直接開けます。',
+          helpTitle: '使い方と注意事項', close: '閉じる', helpBasicsTitle: '基本操作', helpStep1: 'DBFファイルを選択またはドロップします。DBT / FPTがある場合は一緒に追加できます。', helpStep2: 'ファイル情報とフィールド構成を確認し、データをページ単位で移動します。', helpStep3: '文字化けする場合はファイル情報の文字コードを変更します。セルをクリックすると完全な値を確認できます。「前のレコード」「次のレコード」で同じフィールドを現在ページの表示順に確認できます。削除済みの表示設定に従い、ページの端で止まります。', helpStep4: '必要なページを表示した状態で、現在ページをCSVとしてコピーまたは保存できます。', helpPrivacyTitle: 'プライバシー', helpPrivacyBody: 'DBF / DBT / FPTはブラウザー内だけで読み取ります。このアプリから外部サーバーへ送信しません。', helpNotesTitle: '注意事項', helpNoteReadOnly: '閲覧専用です。元のDBFやメモファイルを書き換えません。', helpNoteCsv: 'CSV出力は読み込みが完了した現在ページが対象です。処理中や読み込みエラー時は利用できません。出力開始時の列・行・文字コード・メモ・ファイル名を保持します。タブやページを切り替えても開始済みの出力はその内容で完了します。元のタブを閉じるか同じファイルで新しい出力を開始すると、ブラウザーに渡す前の未完了の出力を中止します。', helpNoteMemo: 'メモフィールドの内容には同名のDBT / FPTが必要な場合があります。メモファイルがなくてもDBF本体は確認できます。', helpNoteDialect: 'DBFには複数の方言があります。未知のフィールド型や特殊なメモ形式は完全には表示できない場合があります。', helpNoteIndexes: 'NDX / MDX / CDXなどのインデックスファイルは使用しません。', helpOffline: '配布用HTMLは実行時の外部通信を必要とせず、ローカルファイルとして直接開けます。',
           dropTitle: 'DBFファイルをここにドロップ', dropBody: 'DBT / FPTメモファイルがある場合は一緒に追加できます。', chooseFiles: 'ファイルを選択', supportedFormats: '対応: .dbf / .dbt / .fpt', openFile: '開いているファイル', addFiles: '追加', overviewTitle: 'ファイル情報', fieldsTitle: 'フィールド', fieldsCount: '{count}フィールド', dataTitle: 'データプレビュー', dataSubtitle: '現在ページ分だけDBFから読み込みます。', columns: '列', rowsPerPage: '1ページの行数', showDeleted: '削除済みも表示', loadingRecords: 'レコードを読み込み中…', previousPage: '前のページ', nextPage: '次のページ', previous: '前へ', next: '次へ', pageNumber: 'ページ番号', outputFilename: 'CSVファイル名', copyCsv: 'CSVをコピー', downloadCsv: 'CSVを保存', overviewTab: '概要', fieldsTab: 'フィールド', dataTab: 'データ',
-          cellDetails: 'セルの内容', recordLabel: 'レコード', fieldLabel: 'フィールド', typeLabel: '型', copyValue: '値をコピー', columnsTitle: '表示する列', showAllColumns: 'すべて表示', done: '完了',
+          cellDetails: 'セルの内容', recordLabel: 'レコード', fieldLabel: 'フィールド', typeLabel: '型', copyValue: '値をコピー', previousRecord: '前のレコード', nextRecord: '次のレコード', cellPosition: '現在ページの表示レコード {position} / {count}', columnsTitle: '表示する列', showAllColumns: 'すべて表示', done: '完了',
           summaryRecords: 'レコード', summaryFields: 'フィールド', summaryUpdated: '最終更新', summaryFormat: '形式', detailFileSize: 'ファイルサイズ', detailHeaderLength: 'ヘッダー長', detailRecordLength: 'レコード長', detailLanguageDriver: '言語ドライバー', detailEncoding: '文字コード', detailMemoFile: 'メモファイル', detailPhysicalRecords: '実データ上のレコード', detailVersionByte: 'バージョン値', noMemoAttached: 'このDBFにはメモフィールドがあります。内容を確認するには同じベース名のDBT / FPTファイルを追加してください。', truncatedWarning: 'ヘッダー記載のレコード数よりファイル内の実データが少ないため、読み取れる範囲だけ表示しています。',
           fieldName: 'フィールド名', dbfType: 'DBF型', readableType: '内容', length: '長さ', decimals: '小数桁', noFields: 'フィールド定義を見つけられませんでした。', record: 'レコード', deleted: '削除済み', noRows: 'このページに表示できるレコードがありません。', pageOf: '{page} / {pages}ページ', range: '{start}–{end} / {total}件', recordsHidden: 'このページの削除済み {count}件を非表示',
           encodingAuto: '自動 ({encoding})', encodingShiftJis: 'Shift_JIS / Windows-31J', encodingUtf8: 'UTF-8', encoding1252: 'Windows-1252', encoding1250: 'Windows-1250', encoding1251: 'Windows-1251', encodingGbk: 'GBK', encodingBig5: 'Big5', encodingEucKr: 'EUC-KR', encoding874: 'Windows-874',
@@ -691,9 +698,9 @@
         },
         en: {
           brandMeta: 'Inspect DBF files in your browser', introTitle: 'Open a DBF file and inspect its contents', lead: 'Inspect field definitions and records locally in your browser. Switch text encoding when legacy text looks garbled.', localBadge: 'Fully local processing',
-          helpTitle: 'How to use & notes', close: 'Close', helpBasicsTitle: 'Basics', helpStep1: 'Choose or drop DBF files. You can add DBT / FPT memo files at the same time.', helpStep2: 'Review file information and fields, then browse records page by page.', helpStep3: 'If text looks garbled, change the encoding in File information. Click a cell to inspect its full value.', helpStep4: 'With the needed page visible, copy or download the current page as CSV.', helpPrivacyTitle: 'Privacy', helpPrivacyBody: 'DBF / DBT / FPT files are read only inside your browser. This app does not send them to an external server.', helpNotesTitle: 'Notes', helpNoteReadOnly: 'The viewer is read-only and never rewrites the source DBF or memo files.', helpNoteCsv: 'CSV is available only after the current page finishes loading. It keeps the columns, rows, encoding, memo source and filename captured when export starts, even if you switch tabs or pages. Closing the source tab or starting a newer export from the same file cancels output that has not yet been handed to the browser.', helpNoteMemo: 'Memo fields may require a matching DBT / FPT file. The DBF itself remains viewable without the memo file.', helpNoteDialect: 'DBF has several dialects. Unknown field types and unusual memo formats may not be fully decoded.', helpNoteIndexes: 'Index files such as NDX / MDX / CDX are not used.', helpOffline: 'The distributable HTML needs no runtime network access and can be opened directly as a local file.',
+          helpTitle: 'How to use & notes', close: 'Close', helpBasicsTitle: 'Basics', helpStep1: 'Choose or drop DBF files. You can add DBT / FPT memo files at the same time.', helpStep2: 'Review file information and fields, then browse records page by page.', helpStep3: 'If text looks garbled, change the encoding in File information. Click a cell to inspect its full value. Use Previous record / Next record to inspect the same field in the current page’s visible order. Navigation follows Show deleted and stops at page boundaries.', helpStep4: 'With the needed page visible, copy or download the current page as CSV.', helpPrivacyTitle: 'Privacy', helpPrivacyBody: 'DBF / DBT / FPT files are read only inside your browser. This app does not send them to an external server.', helpNotesTitle: 'Notes', helpNoteReadOnly: 'The viewer is read-only and never rewrites the source DBF or memo files.', helpNoteCsv: 'CSV is available only after the current page finishes loading. It keeps the columns, rows, encoding, memo source and filename captured when export starts, even if you switch tabs or pages. Closing the source tab or starting a newer export from the same file cancels output that has not yet been handed to the browser.', helpNoteMemo: 'Memo fields may require a matching DBT / FPT file. The DBF itself remains viewable without the memo file.', helpNoteDialect: 'DBF has several dialects. Unknown field types and unusual memo formats may not be fully decoded.', helpNoteIndexes: 'Index files such as NDX / MDX / CDX are not used.', helpOffline: 'The distributable HTML needs no runtime network access and can be opened directly as a local file.',
           dropTitle: 'Drop DBF files here', dropBody: 'Add DBT / FPT memo files at the same time when available.', chooseFiles: 'Choose files', supportedFormats: 'Supported: .dbf / .dbt / .fpt', openFile: 'Open file', addFiles: 'Add', overviewTitle: 'File information', fieldsTitle: 'Fields', fieldsCount: '{count} fields', dataTitle: 'Data preview', dataSubtitle: 'Only the current page is read from the DBF.', columns: 'Columns', rowsPerPage: 'Rows per page', showDeleted: 'Show deleted', loadingRecords: 'Loading records…', previousPage: 'Previous page', nextPage: 'Next page', previous: 'Previous', next: 'Next', pageNumber: 'Page number', outputFilename: 'CSV filename', copyCsv: 'Copy CSV', downloadCsv: 'Download CSV', overviewTab: 'Overview', fieldsTab: 'Fields', dataTab: 'Data',
-          cellDetails: 'Cell contents', recordLabel: 'Record', fieldLabel: 'Field', typeLabel: 'Type', copyValue: 'Copy value', columnsTitle: 'Visible columns', showAllColumns: 'Show all', done: 'Done',
+          cellDetails: 'Cell contents', recordLabel: 'Record', fieldLabel: 'Field', typeLabel: 'Type', copyValue: 'Copy value', previousRecord: 'Previous record', nextRecord: 'Next record', cellPosition: 'Visible record {position} of {count} on this page', columnsTitle: 'Visible columns', showAllColumns: 'Show all', done: 'Done',
           summaryRecords: 'Records', summaryFields: 'Fields', summaryUpdated: 'Last update', summaryFormat: 'Format', detailFileSize: 'File size', detailHeaderLength: 'Header length', detailRecordLength: 'Record length', detailLanguageDriver: 'Language driver', detailEncoding: 'Text encoding', detailMemoFile: 'Memo file', detailPhysicalRecords: 'Records in file', detailVersionByte: 'Version byte', noMemoAttached: 'This DBF contains memo fields. Add a DBT / FPT file with the same basename to inspect memo contents.', truncatedWarning: 'The file contains fewer record bytes than the record count declared in its header. Only the physically available records are shown.',
           fieldName: 'Field name', dbfType: 'DBF type', readableType: 'Meaning', length: 'Length', decimals: 'Decimals', noFields: 'No field definitions were found.', record: 'Record', deleted: 'Deleted', noRows: 'There are no visible records on this page.', pageOf: 'Page {page} of {pages}', range: '{start}–{end} of {total}', recordsHidden: '{count} deleted records hidden on this page',
           encodingAuto: 'Auto ({encoding})', encodingShiftJis: 'Shift_JIS / Windows-31J', encodingUtf8: 'UTF-8', encoding1252: 'Windows-1252', encoding1250: 'Windows-1250', encoding1251: 'Windows-1251', encodingGbk: 'GBK', encodingBig5: 'Big5', encodingEucKr: 'EUC-KR', encoding874: 'Windows-874',
@@ -722,7 +729,7 @@
       const MAX_MEMO_BYTES = 16 * 1024 * 1024;
       const storageKey = `${APP_CONFIG.slug}:language`;
       const decoderCache = new Map();
-      const state = { files: [], activeId: null, language: readStorage(storageKey) || detectLanguage(), generation: 0, mobilePage: 'overview', activeCellText: '', loadingCount: 0 };
+      const state = { files: [], activeId: null, language: readStorage(storageKey) || detectLanguage(), generation: 0, mobilePage: 'overview', activeCell: null, activeCellText: '', loadingCount: 0 };
 
       const $ = selector => document.querySelector(selector);
       const $$ = selector => Array.from(document.querySelectorAll(selector));
@@ -921,6 +928,7 @@
       }
       async function readPage(fileState) {
         if (!fileState.header || getActiveFile() !== fileState) return;
+        closeCell();
         state.generation += 1;
         const pageSize = fileState.pageSize;
         const total = fileState.header.effectiveRecords;
@@ -1056,6 +1064,7 @@
 
       async function activateFile(id) {
         const fileState = state.files.find(item => item.id === id); if (!fileState) return;
+        closeCell();
         state.activeId = id; state.generation += 1;
         renderFileStatus(fileState);
         $('#emptyState').hidden = true; $('#fileManager').classList.add('show'); $('#content').classList.add('show'); $('#mobileBottomBar').classList.add('show'); document.body.classList.add('has-mobile-bar');
@@ -1068,6 +1077,7 @@
 
       function closeFile(id) {
         const index = state.files.findIndex(item => item.id === id); if (index < 0) return;
+        closeCell();
         const [removed] = state.files.splice(index,1); toast(t('closedFile',{name:removed.dbfFile.name})); state.generation += 1;
         if (!state.files.length) {
           state.activeId = null; refreshCsvActions(); renderDataLoading(false); $('#emptyState').hidden = false; $('#fileManager').classList.remove('show'); $('#content').classList.remove('show'); $('#mobileBottomBar').classList.remove('show'); document.body.classList.remove('has-mobile-bar'); setBanner(''); return;
@@ -1152,12 +1162,71 @@
         $('#pageInfo').textContent = t('pageOf',{page:formatNumber(fileState.page),pages:formatNumber(pages)}); $('#pageRangeLabel').textContent = t('range',{start:formatNumber(start),end:formatNumber(end),total:formatNumber(total)}); $('#pageJump').max = String(pages); $('#pageJump').value = String(fileState.page); $('#prevButton').disabled = fileState.page <= 1; $('#nextButton').disabled = fileState.page >= pages;
       }
 
+      function closeCell() {
+        // Inspector ownership is independent of page requests and CSV snapshots.
+        state.activeCell = null; state.activeCellText = '';
+        $('#copyCellButton').disabled = true; $('#prevCellButton').disabled = true; $('#nextCellButton').disabled = true;
+        if ($('#cellDialog').open) $('#cellDialog').close();
+      }
+      function isCurrentCell(context) {
+        return Boolean(context && state.activeCell === context && $('#cellDialog').open && isPageReady(context.source) && context.source.readyPage === context.page && context.source.memoFile === context.memoContext.memoFile && context.source.memoKind === context.memoContext.memoKind);
+      }
+      function renderCellNavigation(context) {
+        const rows = isCurrentCell(context) ? visibleRows(context.source) : [];
+        const index = rows.indexOf(context.row);
+        $('#prevCellButton').disabled = index <= 0;
+        $('#nextCellButton').disabled = index < 0 || index >= rows.length - 1;
+        $('#cellPosition').textContent = index < 0 ? '' : t('cellPosition',{position:formatNumber(index + 1),count:formatNumber(rows.length)});
+      }
       async function openCell(fileState,row,field,cell) {
-        $('#cellRecord').textContent = formatNumber(row.recordNumber); $('#cellField').textContent = field.name; $('#cellType').textContent = `${field.type} · ${fieldTypeLabel(field)}`; $('#cellValue').textContent = cell.memoRef ? t('memoLoading') : (cell.value === '' && cell.isNull ? t('null') : cell.value); state.activeCellText = cell.value || ''; $('#cellDialog').showModal();
+        if (!isPageReady(fileState) || !visibleRows(fileState).includes(row) || fileState.hiddenFields.has(field.index)) return;
+        const context = {
+          source: fileState, page: fileState.readyPage, row, field, loading: Boolean(cell.memoRef),
+          memoContext: { memoFile: fileState.memoFile, memoKind: fileState.memoKind, encodingMode: getActiveEncoding(fileState) }
+        };
+        state.activeCell = context; state.activeCellText = cell.memoRef ? '' : (cell.value || '');
+        $('#cellRecord').textContent = formatNumber(row.recordNumber); $('#cellField').textContent = field.name; $('#cellType').textContent = `${field.type} · ${fieldTypeLabel(field)}`;
+        $('#cellValue').textContent = cell.memoRef ? t('memoLoading') : (cell.value === '' && cell.isNull ? t('null') : cell.value);
+        $('#copyCellButton').disabled = context.loading;
+        if (!$('#cellDialog').open) $('#cellDialog').showModal();
+        renderCellNavigation(context);
         if (cell.memoRef) {
-          try { const value = await readMemo(fileState,cell.memoRef,cell.memoBinary); if (!$('#cellDialog').open || getActiveFile()?.id !== fileState.id) return; $('#cellValue').textContent = value || t('blank'); state.activeCellText = value || ''; }
-          catch (error) { if (!$('#cellDialog').open) return; const message = error?.message || t('memoInvalid'); $('#cellValue').textContent = message; state.activeCellText = message; }
+          try {
+            const value = await readMemo(context.memoContext,cell.memoRef,cell.memoBinary);
+            if (!isCurrentCell(context)) return;
+            $('#cellValue').textContent = value || t('blank'); state.activeCellText = value || '';
+          } catch (error) {
+            if (!isCurrentCell(context)) return;
+            const message = error?.message || t('memoInvalid'); $('#cellValue').textContent = message; state.activeCellText = message;
+          } finally {
+            if (isCurrentCell(context)) { context.loading = false; $('#copyCellButton').disabled = false; }
+          }
         }
+      }
+      async function navigateCell(direction) {
+        const context = state.activeCell;
+        if (!isCurrentCell(context) || ![-1,1].includes(direction)) return;
+        const rows = visibleRows(context.source), index = rows.indexOf(context.row), next = index + direction;
+        if (index < 0 || next < 0 || next >= rows.length) return;
+        const row = rows[next];
+        await openCell(context.source,row,context.field,row.cells[context.field.index]);
+      }
+      async function copyCell() {
+        const context = state.activeCell;
+        if (!isCurrentCell(context) || context.loading) return;
+        const ok = await copyText(state.activeCellText,() => isCurrentCell(context));
+        if (isCurrentCell(context)) toast(t(ok ? 'valueCopied' : 'copyFailed'));
+      }
+      function bindCellDialog() {
+        const dialog = $('#cellDialog');
+        $('#closeCellButton').addEventListener('click',closeCell);
+        dialog.addEventListener('cancel',event => { event.preventDefault(); closeCell(); });
+        // A queued close event from the previous opening must not clear a reopened cell.
+        dialog.addEventListener('close',() => { if (!dialog.open) closeCell(); });
+        closeDialogOnBackdrop(dialog,closeCell);
+        $('#copyCellButton').addEventListener('click',copyCell);
+        $('#prevCellButton').addEventListener('click',() => navigateCell(-1));
+        $('#nextCellButton').addEventListener('click',() => navigateCell(1));
       }
 
       function renderColumnsDialog(fileState) {
@@ -1234,7 +1303,7 @@
         renderFileManager(); const active = getActiveFile(); renderFileStatus(active); if (active) { renderOverview(active); renderFields(active); renderColumnsDialog(active); renderDataTable(active); }
       }
       function setMobilePage(page) { state.mobilePage = page; $$('.app-page').forEach(element => element.classList.toggle('mobile-active',element.dataset.mobilePage === page)); $$('.mobile-nav-button').forEach(button => button.classList.toggle('active',button.dataset.mobileTarget === page)); window.scrollTo({top:0,behavior:'smooth'}); }
-      function closeDialogOnBackdrop(dialog) { dialog.addEventListener('click',event => { const rect = dialog.getBoundingClientRect(); const outside = event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom; if (outside) dialog.close(); }); }
+      function closeDialogOnBackdrop(dialog,close = () => dialog.close()) { dialog.addEventListener('click',event => { if (event.target !== dialog) return; const rect = dialog.getBoundingClientRect(); const outside = event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom; if (outside) close(); }); }
 
       $('#chooseButton').addEventListener('click',event => { event.stopPropagation(); $('#fileInput').click(); }); $('#addFilesButton').addEventListener('click',() => $('#fileInput').click()); $('#fileInput').addEventListener('change',async event => { await addFiles(event.target.files); event.target.value = ''; });
       const dropzone = $('#dropzone'); ['dragenter','dragover'].forEach(type => dropzone.addEventListener(type,event => { event.preventDefault(); dropzone.classList.add('dragover'); })); ['dragleave','drop'].forEach(type => dropzone.addEventListener(type,event => { event.preventDefault(); dropzone.classList.remove('dragover'); })); dropzone.addEventListener('click',() => $('#fileInput').click()); dropzone.addEventListener('keydown',event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); $('#fileInput').click(); } }); document.addEventListener('dragover',event => { if (event.dataTransfer?.types?.includes('Files')) event.preventDefault(); }); document.addEventListener('drop',async event => { if (!event.dataTransfer?.files?.length) return; event.preventDefault(); dropzone.classList.remove('dragover'); await addFiles(Array.from(event.dataTransfer.files)); });
@@ -1243,7 +1312,7 @@
       $('#columnsButton').addEventListener('click',() => { const active = getActiveFile(); if (!active?.header) return; renderColumnsDialog(active); $('#columnsDialog').showModal(); }); $('#closeColumnsButton').addEventListener('click',() => $('#columnsDialog').close()); $('#showAllColumnsButton').addEventListener('click',() => $$('#columnsList input[type="checkbox"]').forEach(input => { input.checked = true; })); $('#applyColumnsButton').addEventListener('click',() => { const active = getActiveFile(); if (!active) return; active.hiddenFields.clear(); $$('#columnsList input[type="checkbox"]').forEach(input => { if (!input.checked) active.hiddenFields.add(Number(input.dataset.index)); }); $('#columnsDialog').close(); renderDataTable(active); });
       $('#outputFilename').addEventListener('input',event => { const active = getActiveFile(); if (active) active.outputFilename = event.target.value; }); $('#outputFilename').addEventListener('blur',normalizedFilenameBase); $('#copyCsvButton').addEventListener('click',copyCsv); $('#downloadCsvButton').addEventListener('click',downloadCsv);
       $('#languageButton').addEventListener('click',() => { state.language = state.language === 'ja' ? 'en' : 'ja'; writeStorage(storageKey,state.language); applyLanguage(); }); const helpDialog = $('#helpDialog'); $('#helpButton').addEventListener('click',() => helpDialog.showModal()); $('#closeHelpButton').addEventListener('click',() => helpDialog.close()); closeDialogOnBackdrop(helpDialog);
-      const cellDialog = $('#cellDialog'); $('#closeCellButton').addEventListener('click',() => cellDialog.close()); closeDialogOnBackdrop(cellDialog); $('#copyCellButton').addEventListener('click',async () => { const ok = await copyText(state.activeCellText); toast(t(ok ? 'valueCopied' : 'copyFailed')); }); closeDialogOnBackdrop($('#columnsDialog'));
+      bindCellDialog(); closeDialogOnBackdrop($('#columnsDialog'));
       $$('.mobile-nav-button').forEach(button => button.addEventListener('click',() => setMobilePage(button.dataset.mobileTarget)));
 
       $('#versionBadge').textContent = `v${APP_CONFIG.version}`;
