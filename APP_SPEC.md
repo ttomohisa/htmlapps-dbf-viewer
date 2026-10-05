@@ -27,7 +27,7 @@ A successful session is:
 3. Matching memo files are associated by basename.
 4. The selected DBF opens in a tab and displays file information, field definitions, and records.
 5. Use page controls and per-page row count to inspect records without decoding the full table into JavaScript objects.
-6. Click a cell to inspect the full value. Memo fields load from an attached DBT/FPT file on demand.
+6. Click a cell to inspect the full value. Previous record / Next record keeps the same field and follows the visible, sorted rows on the current page. Memo fields load from an attached DBT/FPT file on demand.
 7. Edit the CSV output filename and download or copy the current page.
 
 ## 4. Functional requirements
@@ -49,6 +49,9 @@ A successful session is:
 - Provide automatic encoding selection from common DBF language-driver IDs and a manual override including Shift_JIS / Windows-31J, UTF-8, Windows-1252, Windows-1250, Windows-1251, GBK, Big5, EUC-KR, and Windows-874.
 - Keep the encoding selector in file information rather than the initial empty state.
 - Memo cells show a compact reference in the table. Clicking the cell reads the corresponding memo block on demand from DBT or FPT.
+- Cell Inspector Previous record / Next record follows the current page’s visible, sorted row order and deleted-row policy in the same field. Metadata retains original DBF record numbers; a separate status describes the visible position. First/last directions are disabled, never wrap, and never read another DBF page.
+- Each inspector request owns its memo success/error, value-copy text and feedback. Memo file/kind/effective encoding are captured before reading. Rapid navigation, close (button/Escape/backdrop), reopen, page/encoding changes, source replacement, tab switching and tab closure invalidate obsolete work without modifying page or CSV request generations.
+- Copy value is unavailable while a memo is loading. A current memo error stays visible and copyable; superseded clipboard completion cannot notify the newer inspector or start a legacy fallback copy. A native clipboard write already handed to the browser cannot be recalled.
 - CSV export/copy uses the currently visible preview page and current deleted-row visibility. Memo values are resolved for the exported page when a companion memo file is attached.
 - CSV copy/download is disabled while the requested page is loading or failed; direct calls also reject non-current rows. A successfully loaded empty page exports its header only.
 - Every page request owns its success, error and cleanup. Older requests, closed tabs and old source/encoding contexts cannot mutate the current page or ready state.
@@ -124,7 +127,7 @@ Current stable desktop and mobile versions of Chromium, Firefox, and Safari. Dir
 The upper-right help button opens a bilingual “使い方と注意事項” / “How to use & notes” dialog covering:
 
 - selecting DBF and optional memo files,
-- page navigation and cell inspection,
+- page navigation, same-field inspector record navigation and memo loading,
 - encoding override,
 - current-page CSV export,
 - complete local processing,

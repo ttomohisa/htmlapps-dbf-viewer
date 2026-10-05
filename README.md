@@ -21,6 +21,7 @@ GitHub Pages delivers the initial HTML. After it loads, selected files are read 
 - **Inspect DBF structure** — Review DBF version, update date, record count, field definitions, record size, header size, and language-driver information.
 - **Read records page by page** — Only the requested page is materialized instead of expanding the entire DBF into JavaScript objects.
 - **Handle legacy text encodings** — Switch decoding when text is garbled, including Shift_JIS / Windows-31J.
+- **Compare the same field across records** — Use Previous record / Next record inside Cell Inspector, following the current page’s sort and deleted-row visibility.
 - **Read memo data when available** — Attach matching `.dbt` / `.fpt` files by basename and load memo blocks on demand.
 - **Review deleted records** — Show or hide records marked as deleted without modifying the source file.
 - **Inspect and export what you see** — Choose visible columns, sort the current page, open full cell values, and copy or save the current page as UTF-8 CSV.
@@ -54,8 +55,10 @@ Python, Node.js, and a local web server are not required. The builder uses Windo
 2. Review the file information and field definitions.
 3. Browse records with the paging controls. Change the text encoding if legacy text is garbled.
 4. Show deleted records when you need to inspect rows marked as deleted.
-5. Click a cell to inspect its full value. Memo content is loaded only when needed.
+5. Click a cell to inspect its full value. Use Previous record / Next record to move through the same field without closing the inspector. It stops at the first/last visible row on the current page. Memo content is loaded only when needed; Copy value becomes available after it finishes.
 6. Copy or save the current preview page as UTF-8 CSV.
+
+Switching records or closing the inspector prevents an older memo result or error from replacing the current value. Changing pages, files or encoding closes the inspector.
 
 CSV is available only after the current page finishes loading. It keeps the columns, rows, encoding, memo source and filename captured when export starts, even if you switch tabs or pages. Closing the source tab or starting a newer export from the same file cancels output that has not yet been handed to the browser.
 

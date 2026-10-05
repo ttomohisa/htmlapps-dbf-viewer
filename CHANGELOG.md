@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Add Previous record / Next record to Cell Inspector, preserving the same field and current visible-page order without extra page reads.
+- Prevent obsolete memo successes/errors from overwriting a newer inspector value or copy text; capture memo sources and encoding per inspector request.
+- Disable value copying during memo loads, invalidate closed/source-changed inspectors, and suppress stale clipboard fallback/feedback.
+- Keep keyboard-activated dialog buttons from being mistaken for backdrop clicks.
+- Exercise inspector lifecycle/navigation with synthetic DBT/FPT fixtures across all release variants.
+
 - Keep CSV actions unavailable until the requested page is ready, and reject stale page data.
 - Prevent older successful/failed reads from clearing a newer loading state or replacing its rows/errors.
 - Capture CSV rows, visible fields, memo source, encoding and edited filename before asynchronous work; cancel closed/superseded exports and suppress stale notifications.
