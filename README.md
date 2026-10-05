@@ -57,6 +57,8 @@ Python, Node.js, and a local web server are not required. The builder uses Windo
 5. Click a cell to inspect its full value. Memo content is loaded only when needed.
 6. Copy or save the current preview page as UTF-8 CSV.
 
+CSV is available only after the current page finishes loading. It keeps the columns, rows, encoding, memo source and filename captured when export starts, even if you switch tabs or pages. Closing the source tab or starting a newer export from the same file cancels output that has not yet been handed to the browser.
+
 ## Publish with GitHub Pages
 
 The repository includes a workflow that builds the standalone HTML and deploys `dist/` to GitHub Pages automatically.
@@ -99,6 +101,8 @@ powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File .\scripts\check-
 ```
 
 The build/verification flow checks the dependency lock, generates the standalone artifacts, verifies unresolved placeholders and runtime-network restrictions, and builds/verifies the self-extracting variant.
+
+Node.js 24 is required for regression checks. Run `node tests/run-tests.cjs` after building. Tests exercise source, readable HTML, the root distribution and the restored self-extract payload. After an intentional source change, copy the generated `dist/index.html` to `dbf-viewer.html` before the final repository check. Browser, clipboard, download and file-mode checks remain separate manual checks.
 
 ## Privacy and runtime network protection
 
