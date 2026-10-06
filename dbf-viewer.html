@@ -415,12 +415,12 @@
 </svg>
         </div>
         <div class="brand-copy">
-          <p class="brand-name"><span id="brandName">DBF Viewer</span><span class="version-badge" id="versionBadge">v1.0.0</span></p>
+          <p class="brand-name"><span id="brandName">DBF Viewer</span><span class="version-badge" id="versionBadge">v1.0.1</span></p>
           <p class="brand-meta" data-i18n="brandMeta">DBFをブラウザー内で確認</p>
         </div>
       </div>
       <div class="header-actions">
-        <button class="language-button" id="languageButton" type="button" aria-label="Switch language">EN</button>
+        <button class="language-button" id="languageButton" type="button" aria-label="英語に切り替え" title="英語に切り替え">EN</button>
         <button class="icon-button" id="helpButton" type="button" data-i18n-title="helpTitle" data-i18n-aria-label="helpTitle" title="使い方と注意事項" aria-label="使い方と注意事項">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.35 2.35 0 1 1 3.72 1.9c-.92.67-1.52 1.12-1.52 2.1"/><path d="M12 17h.01"/></svg>
         </button>
@@ -644,8 +644,8 @@
     (() => {
       'use strict';
 
-      const APP_CONFIG = {"$schema":"./schemas/app-config.schema.json","name":"DBF Viewer","nameJa":"DBF Viewer","slug":"dbf-viewer","version":"1.0.0","description":"Open DBF files locally in your browser and inspect fields, records, encoding, and memo data.","descriptionJa":"DBFファイルをブラウザー内で開き、フィールド構成・レコード・文字コード・メモデータを確認します。","defaultLanguage":"auto","repository":{"owner":"ttomohisa","name":"htmlapps-dbf-viewer"},"build":{"output":"dist/index.html","blockRuntimeNetwork":true,"selfExtract":{"enabled":true,"output":"dist/index.self-extract.html"},"sizeBudget":{"readableWarningMb":10,"selfExtractWarningMb":6}}};
-      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.2","generatedAtUtc":"2026-10-05T20:05:50.7678255Z","app":{"name":"DBF Viewer","slug":"dbf-viewer","version":"1.0.0"},"dependencies":[]};
+      const APP_CONFIG = {"$schema":"./schemas/app-config.schema.json","name":"DBF Viewer","nameJa":"DBF Viewer","slug":"dbf-viewer","version":"1.0.1","description":"Open DBF files locally in your browser and inspect fields, records, encoding, and memo data.","descriptionJa":"DBFファイルをブラウザー内で開き、フィールド構成・レコード・文字コード・メモデータを確認します。","defaultLanguage":"auto","repository":{"owner":"ttomohisa","name":"htmlapps-dbf-viewer"},"build":{"output":"dist/index.html","blockRuntimeNetwork":true,"selfExtract":{"enabled":true,"output":"dist/index.self-extract.html"},"sizeBudget":{"readableWarningMb":10,"selfExtractWarningMb":6}}};
+      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.2","generatedAtUtc":"2026-10-06T16:06:46.0545267Z","app":{"name":"DBF Viewer","slug":"dbf-viewer","version":"1.0.1"},"dependencies":[]};
       const assetBundle = {"schemaVersion":2,"dependencies":{}};
       const blobUrls = new Set();
       const assetByteCache = new Map();
@@ -1299,7 +1299,7 @@
         $$('[data-i18n]').forEach(element => { element.textContent = t(element.dataset.i18n); });
         $$('[data-i18n-title]').forEach(element => { element.title = t(element.dataset.i18nTitle); });
         $$('[data-i18n-aria-label]').forEach(element => { element.setAttribute('aria-label',t(element.dataset.i18nAriaLabel)); });
-        $('#languageButton').textContent = state.language === 'ja' ? 'EN' : '日本語'; $('#languageButton').setAttribute('aria-label',state.language === 'ja' ? '英語に切り替え' : 'Switch to Japanese'); document.title = state.language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name; $('#brandName').textContent = state.language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name; $('#footerText').textContent = t('footer',{version:APP_CONFIG.version});
+        $('#languageButton').textContent = state.language === 'ja' ? 'EN' : 'JA'; const languageTarget = state.language === 'ja' ? '英語に切り替え' : 'Switch to Japanese'; $('#languageButton').setAttribute('aria-label',languageTarget); $('#languageButton').title = languageTarget; document.title = state.language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name; $('#brandName').textContent = state.language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name; $('#footerText').textContent = t('footer',{version:APP_CONFIG.version});
         renderFileManager(); const active = getActiveFile(); renderFileStatus(active); if (active) { renderOverview(active); renderFields(active); renderColumnsDialog(active); renderDataTable(active); }
       }
       function setMobilePage(page) { state.mobilePage = page; $$('.app-page').forEach(element => element.classList.toggle('mobile-active',element.dataset.mobilePage === page)); $$('.mobile-nav-button').forEach(button => button.classList.toggle('active',button.dataset.mobileTarget === page)); window.scrollTo({top:0,behavior:'smooth'}); }

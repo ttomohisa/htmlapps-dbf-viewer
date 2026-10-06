@@ -1,5 +1,7 @@
 # DBF Viewer
 
+ヘッダーの言語切り替えは EN / JA で統一し、切り替え先とヘルプの説明は表示言語に合わせます。バージョンは vMAJOR.MINOR.PATCH 形式で、バッジは「完全ローカル処理」/「Fully local processing」のままです。
+
 [![GitHub Pages](https://github.com/ttomohisa/htmlapps-dbf-viewer/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/ttomohisa/htmlapps-dbf-viewer/actions/workflows/deploy-pages.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Single HTML](https://img.shields.io/badge/distribution-single%20HTML-0ea5e9)](https://ttomohisa.github.io/htmlapps-dbf-viewer/)
@@ -125,7 +127,7 @@ GitHub Pages版では最初のHTML配信だけ通信が発生します。その�
 
 ## 依存関係
 
-DBF Viewer v1.0.0 は、実行時のサードパーティJavaScriptライブラリを同梱していません。
+DBF Viewer v1.0.1 は、実行時のサードパーティJavaScriptライブラリを同梱していません。
 
 形式・プロジェクトに関する補足は [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) を確認してください。
 

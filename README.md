@@ -1,5 +1,7 @@
 # DBF Viewer
 
+The header uses EN / JA language targets with localized accessible names and Help titles; the version follows vMAJOR.MINOR.PATCH. The local-processing badge remains 完全ローカル処理 / Fully local processing.
+
 [![GitHub Pages](https://github.com/ttomohisa/htmlapps-dbf-viewer/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/ttomohisa/htmlapps-dbf-viewer/actions/workflows/deploy-pages.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Single HTML](https://img.shields.io/badge/distribution-single%20HTML-0ea5e9)](https://ttomohisa.github.io/htmlapps-dbf-viewer/)
@@ -125,7 +127,7 @@ The GitHub Pages version requires one initial request to load the HTML. After th
 
 ## Dependencies
 
-DBF Viewer v1.0.0 does not bundle third-party runtime JavaScript libraries.
+DBF Viewer v1.0.1 does not bundle third-party runtime JavaScript libraries.
 
 See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for format/project notices.
 

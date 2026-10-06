@@ -246,3 +246,9 @@ if (-not $webrtcReadyText.Contains("options.requireReadyChannelOpen!==false&&(!r
 # Run the DBF behavioral regressions against every distribution after the build.
 & node (Join-Path $Root "tests/run-tests.cjs")
 if ($LASTEXITCODE -ne 0) { throw "DBF regression tests failed." }
+
+# Header translation and version checks across canonical release variants.
+if (-not (Get-Command node -ErrorAction SilentlyContinue)) { throw "Node.js is required for header checks." }
+& node (Join-Path $Root "scripts/test-header-consistency.cjs") (Join-Path $Root "src/index.template.html") (Join-Path $Root "dist/index.html") (Join-Path $Root "dbf-viewer.html") (Join-Path $Root "dist/index.self-extract.html")
+if ($LASTEXITCODE -ne 0) { throw "Header consistency regression checks failed." }
+Write-Host "[OK] Header consistency checks passed." -ForegroundColor Green
