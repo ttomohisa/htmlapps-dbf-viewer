@@ -1,6 +1,10 @@
 # Changelog
 
-## Unreleased
+## v1.0.1 - 2026-10-06
+
+- Standardize EN / JA header targets with localized accessible names and titles. Preserve the existing local-processing badge and Help localization.
+- Synchronize canonical metadata and standalone header versions at v1.0.1.
+- Add source, readable, root-download, and decompressed self-extract header regressions without changing data processing or responsive visibility.
 
 - Add Previous record / Next record to Cell Inspector, preserving the same field and current visible-page order without extra page reads.
 - Prevent obsolete memo successes/errors from overwriting a newer inspector value or copy text; capture memo sources and encoding per inspector request.

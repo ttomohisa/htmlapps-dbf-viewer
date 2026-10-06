@@ -3,7 +3,7 @@
 ## 1. Product identity
 
 - **Name:** DBF Viewer
-- **Version:** v1.0.0
+- **Version:** v1.0.1
 - **Purpose:** Open local DBF files in the browser and inspect their field structure and records without installing database software or uploading the file.
 - **Primary users:** People receiving dBASE/FoxPro-style DBF files from legacy business systems, GIS exports, or archived datasets.
 - **Release artifacts:** `dist/index.html` and `dist/index.self-extract.html`
@@ -132,3 +132,9 @@ The upper-right help button opens a bilingual “使い方と注意事項” / �
 - current-page CSV export,
 - complete local processing,
 - read-only behavior and unsupported DBF dialects/index files.
+
+## Header consistency
+
+- Use EN in Japanese UI and JA in English UI, with localized target-language accessible names and titles.
+- Preserve 完全ローカル処理 / Fully local processing and localized Help labels/titles.
+- Header versions use vMAJOR.MINOR.PATCH; existing responsive visibility is unchanged.

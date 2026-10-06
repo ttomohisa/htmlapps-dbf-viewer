@@ -3,7 +3,7 @@
   "name": "DBF Viewer",
   "nameJa": "DBF Viewer",
   "slug": "dbf-viewer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Open DBF files locally in your browser and inspect fields, records, encoding, and memo data.",
   "descriptionJa": "DBFファイルをブラウザー内で開き、フィールド構成・レコード・文字コード・メモデータを確認します。",
   "defaultLanguage": "auto",
