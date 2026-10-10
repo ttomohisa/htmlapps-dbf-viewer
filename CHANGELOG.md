@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0.2 - 2026-10-10
+
+- Keep Help, Columns, and Cell Inspector bodies within short windows with a fixed header and no outer scrollport; lock background scrolling while open.
+- Restore focus to the same column-header button after keyboard sorting without changing sort or data semantics.
+- Preserve and regression-test the shared shield/check icon before the local-processing label.
+
 ## v1.0.1 - 2026-10-06
 
 - Standardize EN / JA header targets with localized accessible names and titles. Preserve the existing local-processing badge and Help localization.

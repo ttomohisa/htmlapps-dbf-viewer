@@ -3,7 +3,7 @@
 ## 1. Product identity
 
 - **Name:** DBF Viewer
-- **Version:** v1.0.1
+- **Version:** v1.0.2
 - **Purpose:** Open local DBF files in the browser and inspect their field structure and records without installing database software or uploading the file.
 - **Primary users:** People receiving dBASE/FoxPro-style DBF files from legacy business systems, GIS exports, or archived datasets.
 - **Release artifacts:** `dist/index.html` and `dist/index.self-extract.html`
@@ -138,3 +138,10 @@ The upper-right help button opens a bilingual “使い方と注意事項” / �
 - Use EN in Japanese UI and JA in English UI, with localized target-language accessible names and titles.
 - Preserve 完全ローカル処理 / Fully local processing and localized Help labels/titles.
 - Header versions use vMAJOR.MINOR.PATCH; existing responsive visibility is unchanged.
+
+## Dialog and keyboard layout acceptance
+
+- Help, Columns, and Cell Inspector have a bounded viewport height, a retained header, and a shrinking scrollable body. Narrow bottom sheets and safe-area padding remain intact.
+- Modal background scrolling is locked. Close, Escape, backdrop dismissal, reopening, and focus restoration remain available.
+- Sorting keeps focus on the replacement button for the same field without altering row comparison, memo ownership, or CSV readiness.
+- The shield/check icon remains before the localized local-processing badge label.
