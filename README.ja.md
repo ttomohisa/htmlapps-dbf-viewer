@@ -1,5 +1,7 @@
 # DBF Viewer
 
+短い画面や拡大表示でもダイアログ内をスクロールでき、背景は動きません。キーボードで並べ替えた後も同じ列見出しにフォーカスを保持します。完全ローカル処理の前には共通の盾・チェックアイコンを表示します。
+
 ヘッダーの言語切り替えは EN / JA で統一し、切り替え先とヘルプの説明は表示言語に合わせます。バージョンは vMAJOR.MINOR.PATCH 形式で、バッジは「完全ローカル処理」/「Fully local processing」のままです。
 
 [![GitHub Pages](https://github.com/ttomohisa/htmlapps-dbf-viewer/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/ttomohisa/htmlapps-dbf-viewer/actions/workflows/deploy-pages.yml)

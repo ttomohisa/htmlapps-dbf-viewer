@@ -252,3 +252,6 @@ if (-not (Get-Command node -ErrorAction SilentlyContinue)) { throw "Node.js is r
 & node (Join-Path $Root "scripts/test-header-consistency.cjs") (Join-Path $Root "src/index.template.html") (Join-Path $Root "dist/index.html") (Join-Path $Root "dbf-viewer.html") (Join-Path $Root "dist/index.self-extract.html")
 if ($LASTEXITCODE -ne 0) { throw "Header consistency regression checks failed." }
 Write-Host "[OK] Header consistency checks passed." -ForegroundColor Green
+
+& node (Join-Path $Root "scripts/test-dialog-layout.cjs")
+if ($LASTEXITCODE -ne 0) { throw "Dialog layout and shield badge regression checks failed." }

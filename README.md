@@ -1,5 +1,7 @@
 # DBF Viewer
 
+Dialogs stay within short or zoomed windows and lock background scrolling. Keyboard sorting retains focus on the column header. The local-processing label keeps the shared shield/check icon.
+
 The header uses EN / JA language targets with localized accessible names and Help titles; the version follows vMAJOR.MINOR.PATCH. The local-processing badge remains 完全ローカル処理 / Fully local processing.
 
 [![GitHub Pages](https://github.com/ttomohisa/htmlapps-dbf-viewer/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/ttomohisa/htmlapps-dbf-viewer/actions/workflows/deploy-pages.yml)

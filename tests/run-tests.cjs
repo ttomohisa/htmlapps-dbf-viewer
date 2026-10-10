@@ -18,5 +18,6 @@ try {
     console.log(`\nDBF page/export regression variant: ${variant===extracted?'self-extract payload':variant}`);
     run('page-export-state.test.cjs',{DBF_TEST_HTML:path.resolve(root,variant)});
     run('cell-inspector.test.cjs',{DBF_TEST_HTML:path.resolve(root,variant)});
+    run('sort-focus.test.cjs',{DBF_TEST_HTML:path.resolve(root,variant)});
   }
 } finally { fs.rmSync(temp,{recursive:true,force:true}); }
