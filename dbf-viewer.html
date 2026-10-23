@@ -399,6 +399,8 @@
     @media (prefers-reduced-motion: reduce) {
       *,*::before,*::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
     }
+      .help-version { margin-top:18px; color:var(--muted); font-size:11px; }
+    @media (max-width: 620px) { .help-version { display: none; } }
   </style>
 </head>
 <body>
@@ -620,6 +622,7 @@
         <li data-i18n="helpNoteIndexes">NDX / MDX / CDXなどのインデックスファイルは使用しません。</li>
       </ul>
       <p class="dialog-note" data-i18n="helpOffline">配布用HTMLは実行時の外部通信を必要とせず、ローカルファイルとして直接開けます。</p>
+      <p class="help-version" id="helpVersion"></p>
       <!-- APP:HELP:END -->
     </div>
   </dialog>
@@ -648,7 +651,7 @@
       'use strict';
 
       const APP_CONFIG = {"$schema":"./schemas/app-config.schema.json","name":"DBF Viewer","nameJa":"DBF Viewer","slug":"dbf-viewer","version":"1.0.2","description":"Open DBF files locally in your browser and inspect fields, records, encoding, and memo data.","descriptionJa":"DBFファイルをブラウザー内で開き、フィールド構成・レコード・文字コード・メモデータを確認します。","defaultLanguage":"auto","repository":{"owner":"ttomohisa","name":"htmlapps-dbf-viewer"},"build":{"output":"dist/index.html","blockRuntimeNetwork":true,"selfExtract":{"enabled":true,"output":"dist/index.self-extract.html"},"sizeBudget":{"readableWarningMb":10,"selfExtractWarningMb":6}}};
-      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.2","generatedAtUtc":"2026-10-11T22:21:04.1342778Z","app":{"name":"DBF Viewer","slug":"dbf-viewer","version":"1.0.2"},"dependencies":[]};
+      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.2","generatedAtUtc":"2026-10-23T12:54:59.2099098Z","app":{"name":"DBF Viewer","slug":"dbf-viewer","version":"1.0.2"},"dependencies":[]};
       const assetBundle = {"schemaVersion":2,"dependencies":{}};
       const blobUrls = new Set();
       const assetByteCache = new Map();
@@ -697,7 +700,7 @@
           typeText: 'テキスト', typeNumber: '数値', typeDate: '日付', typeLogical: '真偽値', typeInteger: '整数', typeDouble: '倍精度数値', typeCurrency: '通貨', typeDateTime: '日時', typeMemo: 'メモ', typeBinary: 'バイナリ', typeUnknown: '不明', null: 'null', blank: '空', memoRef: 'Memo #{ref}', binaryMemoRef: 'Binary #{ref}', binaryBytes: '{bytes} bytes', unknownVersion: '不明 (0x{hex})',
           statusReading: '{name} を確認しています…', statusReady: '読み込みが完了しました。', fileAdded: '{name} を開きました', memoAttached: '{name} をメモファイルとして関連付けました', memoNoMatch: '対応するDBFが見つからないメモファイルがあります。DBFも一緒に追加してください。', unsupportedFiles: '対応していないファイルは読み込みませんでした。', loadFailed: '{name} を読み込めませんでした: {message}', readFailed: 'データを読み込めませんでした。', invalidTooSmall: 'DBFヘッダーとして小さすぎます。', invalidHeaderLength: 'ヘッダー長が不正です。', invalidRecordLength: 'レコード長が不正です。', invalidFields: 'フィールド定義がレコード長を超えています。', unsupportedEncoding: 'このブラウザーでは選択した文字コードを利用できません。',
           csvCopied: '現在ページのCSVをコピーしました', csvDownloaded: '現在ページのCSVを保存しました', csvFailed: 'CSVを作成できませんでした。', valueCopied: '値をコピーしました', copyFailed: 'コピーできませんでした', memoMissing: '対応するメモファイルがありません。', memoInvalid: 'メモデータを読み取れませんでした。', memoLoading: 'メモを読み込み中…', closedFile: '{name} を閉じました',
-          footer: 'DBF Viewer v{version} · 完全ローカル処理'
+          footer: 'DBF Viewer · 完全ローカル処理'
         },
         en: {
           brandMeta: 'Inspect DBF files in your browser', introTitle: 'Open a DBF file and inspect its contents', lead: 'Inspect field definitions and records locally in your browser. Switch text encoding when legacy text looks garbled.', localBadge: 'Fully local processing',
@@ -710,7 +713,7 @@
           typeText: 'Text', typeNumber: 'Number', typeDate: 'Date', typeLogical: 'Boolean', typeInteger: 'Integer', typeDouble: 'Double', typeCurrency: 'Currency', typeDateTime: 'Date/time', typeMemo: 'Memo', typeBinary: 'Binary', typeUnknown: 'Unknown', null: 'null', blank: 'blank', memoRef: 'Memo #{ref}', binaryMemoRef: 'Binary #{ref}', binaryBytes: '{bytes} bytes', unknownVersion: 'Unknown (0x{hex})',
           statusReading: 'Inspecting {name}…', statusReady: 'Ready.', fileAdded: 'Opened {name}', memoAttached: 'Attached {name} as the memo file', memoNoMatch: 'Some memo files have no matching DBF. Add the DBF file as well.', unsupportedFiles: 'Unsupported files were ignored.', loadFailed: 'Could not open {name}: {message}', readFailed: 'Could not load data.', invalidTooSmall: 'The file is too small to contain a DBF header.', invalidHeaderLength: 'The DBF header length is invalid.', invalidRecordLength: 'The DBF record length is invalid.', invalidFields: 'Field definitions exceed the declared record length.', unsupportedEncoding: 'This browser does not support the selected encoding.',
           csvCopied: 'Copied CSV for the current page', csvDownloaded: 'Downloaded CSV for the current page', csvFailed: 'Could not create CSV.', valueCopied: 'Copied value', copyFailed: 'Could not copy', memoMissing: 'No matching memo file is attached.', memoInvalid: 'Could not read this memo value.', memoLoading: 'Loading memo…', closedFile: 'Closed {name}',
-          footer: 'DBF Viewer v{version} · Fully local processing'
+          footer: 'DBF Viewer · Fully local processing'
         }
       };
 
@@ -1302,7 +1305,7 @@
         $$('[data-i18n]').forEach(element => { element.textContent = t(element.dataset.i18n); });
         $$('[data-i18n-title]').forEach(element => { element.title = t(element.dataset.i18nTitle); });
         $$('[data-i18n-aria-label]').forEach(element => { element.setAttribute('aria-label',t(element.dataset.i18nAriaLabel)); });
-        $('#languageButton').textContent = state.language === 'ja' ? 'EN' : 'JA'; const languageTarget = state.language === 'ja' ? '英語に切り替え' : 'Switch to Japanese'; $('#languageButton').setAttribute('aria-label',languageTarget); $('#languageButton').title = languageTarget; document.title = state.language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name; $('#brandName').textContent = state.language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name; $('#footerText').textContent = t('footer',{version:APP_CONFIG.version});
+        $('#languageButton').textContent = state.language === 'ja' ? 'EN' : 'JA'; const languageTarget = state.language === 'ja' ? '英語に切り替え' : 'Switch to Japanese'; $('#languageButton').setAttribute('aria-label',languageTarget); $('#languageButton').title = languageTarget; document.title = state.language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name; $('#brandName').textContent = state.language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name; $('#footerText').textContent = t('footer'); $('#helpVersion').textContent = 'v' + APP_CONFIG.version;
         renderFileManager(); const active = getActiveFile(); renderFileStatus(active); if (active) { renderOverview(active); renderFields(active); renderColumnsDialog(active); renderDataTable(active); }
       }
       function setMobilePage(page) { state.mobilePage = page; $$('.app-page').forEach(element => element.classList.toggle('mobile-active',element.dataset.mobilePage === page)); $$('.mobile-nav-button').forEach(button => button.classList.toggle('active',button.dataset.mobileTarget === page)); window.scrollTo({top:0,behavior:'smooth'}); }
