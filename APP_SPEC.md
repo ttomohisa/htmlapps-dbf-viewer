@@ -149,3 +149,14 @@ The upper-right help button opens a bilingual “使い方と注意事項” / �
 - Modal background scrolling is locked. Close, Escape, backdrop dismissal, reopening, and focus restoration remain available.
 - Sorting keeps focus on the replacement button for the same field without altering row comparison, memo ownership, or CSV readiness.
 - The shield/check icon remains before the localized local-processing badge label.
+
+## Shared UI conventions v1
+
+- Embed exact Browser Kitty UI 1.0.0 JavaScript/CSS using the component hash lock. Build fails on missing markers or mismatched bytes. No runtime request is added.
+- Show retention above the workspace: closing the tab or reloading clears opened DBF/memo files and view settings. Only explicit language preference is stored. Closing a source removes its session tab; it never deletes disk files.
+- Immediately above CSV actions show source name, current page, visible row/column count and UTF-8 CSV scope. Preserve deleted-row visibility, current-page sort, CSV bytes, memo snapshots and the editable sanitized filename. A loaded empty page remains header-only exportable.
+- Native disabled/busy export controls prevent duplicate UI submission while preparing CSV. Failure stays beside the actions with retry/save guidance. Existing source/page ownership controls delivery and notifications; a newer same-source programmatic request still supersedes an older one. No unsupported Stop action is added.
+- Report Download started only after handing the captured filename and page to the browser. This does not confirm disk completion.
+- Resolve language from valid URL lang, shared browser-kitty:ui-language:v1, legacy dbf-viewer:language, the first supported navigator language, then en. Startup does not write preferences. Explicit switching writes only the shared key and replaces an existing URL lang without adding history. Storage rejection keeps the selected screen language and shows the session-only notice.
+- Switching translates open dialogs, memo loading/errors, CSV scope/busy/failure/delivery, visible notifications, titles and accessible names. Preserve files, page/encoding/sort settings, edited filenames, pending memo ownership, Columns draft selection and mobile destination.
+- S2 autosave states, S1 project/backup workflows, S4 persistent generated previous results, B2 Stop/stopping, D2 destructive confirmation/Undo and D3 saved-data deletion are inapplicable to this read-only session viewer. Existing close ownership guards remain required. Dense table cell/sort and desktop source-tab close controls retain compact targets; primary/header controls use 44px shared targets.

@@ -10,7 +10,7 @@ const normalize = text => text.replace(/\r\n/g,'\n').replace(/"generatedAtUtc"\s
 
 test('generated release carries the current editable source',()=>{
   const template = text => normalize(text).replace(/const (APP_CONFIG|BUILD_MANIFEST|assetBundle) = [\s\S]*?;\n/g, 'const $1 = BUILD_VALUE;\n');
-  assert.equal(template(read('dist/index.html')),template(read('src/index.template.html')));
+  assert.equal(template(read('dist/index.html')),template(read('src/index.template.html').replace('__BK_UI_JS__',()=>read('components/ui-conventions.js')).replace('__BK_UI_CSS__',()=>read('components/ui-conventions.css'))));
 });
 test('root distribution matches the freshly generated readable release',()=>{
   assert.equal(normalize(read('dbf-viewer.html')),normalize(read('dist/index.html')));

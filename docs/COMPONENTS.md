@@ -236,3 +236,7 @@ Useful mount options include `initialPage`, `pageTopTarget`, `pageTopOffset`, `o
 ## WebRTC application-ready rule
 
 For `webrtc-qr-pairing.html`, PeerConnection `connected` alone is not application-ready. The designated readiness DataChannel must also be `open`. Custom channel layouts set `readyChannelLabel` to a reliable control channel.
+
+## Browser Kitty UI 1.0.0
+
+Exact ui-conventions.js and ui-conventions.css assets are pinned by ui-conventions.lock.json and embedded through scripts/embed-ui-conventions.ps1. The build rejects missing/duplicate placeholders and hash mismatches. BrowserKittyUI provides language resolution/explicit preference writes, safe common text, native button states and session status. DBF adapters own CSV snapshots, busy/failure feedback and read-only source closure; this component adds no persistence, export, cancellation or deletion framework. See APP_SPEC.md for rule-level applicability and docs/ARCHITECTURE.md for build integration.

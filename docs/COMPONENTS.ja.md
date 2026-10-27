@@ -254,3 +254,7 @@ mobileBar.setEnabled('save', true);
 ## WebRTCの接続成立ルール
 
 `webrtc-qr-pairing.html` ではPeerConnectionの `connected` だけをアプリ接続済みとして扱いません。指定した準備完了DataChannelが `open` になって初めて `onConnected` を発火します。独自Channel構成ではreliableな制御Channelを `readyChannelLabel` に指定します。
+
+## Browser Kitty UI 1.0.0
+
+ui-conventions.js / ui-conventions.css の正本をそのまま取り込み、ui-conventions.lock.jsonで版とハッシュを固定します。scripts/embed-ui-conventions.ps1はマーカーの不足・重複やハッシュ不一致を拒否し、ビルド時に単一HTMLへ埋め込みます。BrowserKittyUIは言語解決と明示的な設定更新、安全な共通文言、ネイティブのボタン状態、タブ内保持の案内を提供します。DBF側はCSVの出力開始時点の内容、処理中・失敗表示、閲覧専用のファイルタブ終了を管理します。共通部品は保存処理・出力処理・中止処理・削除処理を追加しません。規約ごとの適用範囲はAPP_SPEC.md、ビルド接続はdocs/ARCHITECTURE.mdを参照してください。

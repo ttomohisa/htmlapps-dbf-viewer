@@ -7,7 +7,7 @@ const test = require('node:test');
 // Execute the production parser/state/export functions, with only DOM output and
 // clipboard/download delivery stubbed. Fixtures are tiny, synthetic local files.
 const source = fs.readFileSync(process.env.DBF_TEST_HTML || path.join(__dirname, '../src/index.template.html'), 'utf8');
-const names = ['closeCell','basename','extension','uniqueId','safeTextDecoder','decodeText','decodeAscii','isAllZero','parseDbfHeader','getActiveEncoding','parseMemoReference','parseFieldValue','readPage','readMemo','getActiveFile','buildFileState','activateFile','closeFile','visibleRows','renderDataLoading','renderPagination','resolveCellForCsv','csvEscape','buildCurrentCsv','normalizedFilenameBase','copyCsv','downloadCsv','pageContext','isCurrentPageContext','isPageReady','refreshCsvActions','createCsvSnapshot','isCsvSnapshotLive','isCsvSnapshotCurrent','buildCsv'];
+const names = ['closeCell','basename','extension','uniqueId','safeTextDecoder','decodeText','decodeAscii','isAllZero','parseDbfHeader','getActiveEncoding','parseMemoReference','parseFieldValue','readPage','readMemo','getActiveFile','buildFileState','activateFile','closeFile','visibleRows','renderDataLoading','renderPagination','resolveCellForCsv','csvEscape','buildCurrentCsv','normalizedFilenameBase','copyCsv','downloadCsv','pageContext','isCurrentPageContext','isPageReady','refreshCsvActions','createCsvSnapshot','isCsvSnapshotLive','isCsvSnapshotCurrent','buildCsv','csvResult','finishCsv','localizedMessage','notify'];
 function extract(name) {
   const match = new RegExp('^      (?:async )?function ' + name + '\\(', 'm').exec(source);
   if (!match) return ''; // New helpers are absent on the intentionally failing baseline.
@@ -18,7 +18,7 @@ function extract(name) {
 function harness() {
   const nodes = new Map(), downloads = [], copies = [], toasts = [], tables = [], blobs = new Map();
   const node = id => {
-    if (!nodes.has(id)) { const classes = new Set(); nodes.set(id, {value:'',disabled:false,style:{},textContent:'',hidden:false,classList:{add:c=>classes.add(c),remove:c=>classes.delete(c),toggle:(c,b)=>b?classes.add(c):classes.delete(c),contains:c=>classes.has(c)}}); }
+    if (!nodes.has(id)) { const classes = new Set(); nodes.set(id, {attributes:{},setAttribute(k,v){this.attributes[k]=String(v);},removeAttribute(k){delete this.attributes[k];},value:'',disabled:false,style:{},textContent:'',hidden:false,classList:{add:c=>classes.add(c),remove:c=>classes.delete(c),toggle:(c,b)=>b?classes.add(c):classes.delete(c),contains:c=>classes.has(c)}}); }
     return nodes.get(id);
   };
   const state = {files:[],activeId:null,generation:0,language:'en'};
@@ -26,6 +26,7 @@ function harness() {
     document:{body:{classList:{add(){},remove(){}}},createElement:()=>({click(){downloads.push({name:this.download,blob:blobs.get(this.href)});}})},
     URL:{createObjectURL:blob=>{const id='blob:'+blobs.size;blobs.set(id,blob);return id;},revokeObjectURL(){}},setTimeout(){},toast:x=>toasts.push(x),setBanner(){},renderFileStatus(){},renderFileManager(){},renderOverview(){},renderFields(){},renderColumnsDialog(){},
     renderDataTable:f=>tables.push({id:f.id,page:f.page,loading:f.loading,rows:f.rows.map(r=>r.cells[0].value)}),copyText:async text=>{copies.push(text);return true;}});
+  vm.runInContext(fs.readFileSync(path.join(__dirname,'../components/ui-conventions.js'),'utf8'),context);
   vm.runInContext(names.map(extract).join('\n'),context);
   return {api:context,state,node,downloads,copies,toasts,tables};
 }
@@ -97,7 +98,7 @@ test('CSV snapshot preserves visible fields, row order, deletion flags, cells, m
   await gate.pending[0].resolve();await waitForReads(gate,2);await gate.pending[1].resolve();assert.equal(await job,'__deleted,NAME,NOTE\r\nfalse,Alpha,café\r\ntrue,Zulu,café');
 });
 test('ordinary copy honors hidden fields, deleted visibility, CSV quoting and CRLF',async()=>{
-  const h=harness(),f=await ready(h,'Quotes.dbf',['A,"B','Hidden'],true);f.pageSize=2;await h.api.readPage(f);f.hiddenFields.add(1);f.rows[1].deleted=true;await h.api.copyCsv();assert.equal(h.copies[0],'NAME\r\n"A,""B"');assert.equal(h.toasts.at(-1),'csvCopied');
+  const h=harness(),f=await ready(h,'Quotes.dbf',['A,"B','Hidden'],true);f.pageSize=2;await h.api.readPage(f);f.hiddenFields.add(1);f.rows[1].deleted=true;await h.api.copyCsv();assert.equal(h.copies[0],'NAME\r\n"A,""B"');assert.match(h.toasts.at(-1),/^csvDelivery:/);
 });
 test('missing or failed memo retains the existing CSV reference fallback',async()=>{
   const h=harness(),f=await ready(h,'Alpha.dbf',['Alpha'],true);const fallback=f.rows[0].cells[1].display;assert.equal(await h.api.buildCurrentCsv(f),'NAME,NOTE\r\nAlpha,'+h.api.csvEscape(fallback));const gate=memoGate(f),job=h.api.buildCurrentCsv(f);await waitForReads(gate);gate.pending[0].reject(new Error('bad memo'));assert.equal(await job,'NAME,NOTE\r\nAlpha,'+h.api.csvEscape(fallback));

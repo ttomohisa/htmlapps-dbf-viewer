@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Adopt shared UI 1.0.0 for session retention, scoped current-page CSV, truthful download-started feedback, accessible busy/disabled controls, and shared Japanese/English preferences.
+- Preserve open inspector requests, edited names and Columns drafts when switching language. Keep CSV failures visible with recovery guidance.
+
 - Move only the lower informational footer version to the end of Help. Preserve the existing 620px phone hiding for that version, the header version, and the footer name and local-processing wording. No parser, data, export, dependency, or version changes.
 
 ## v1.0.2 - 2026-10-10

@@ -29,7 +29,7 @@ function harness() {
   }
   document={body:element('body'),activeElement:null,createElement:element};
   const get=id=>{if(!nodes.has(id))nodes.set(id,element());return nodes.get(id);};
-  const context=vm.createContext({document,$:get,state:{language:'en'},formatNumber:String,t:key=>key,renderPagination(){},openCell(){}});
+  const context=vm.createContext({document,$:get,state:{language:'en'},formatNumber:String,t:key=>key,renderPagination(){},refreshCsvActions(){},openCell(){}});
   vm.runInContext(['visibleRows','cellDisplayNode','renderDataTable','cycleSort'].map(extract).join('\n'),context);
   return {api:context,document,get};
 }

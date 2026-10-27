@@ -37,7 +37,7 @@ for (const artifact of artifactPaths.length ? artifactPaths : [path.join(root, '
     const all = selector => nodes.filter(n=>Object.hasOwn(n.attrs,selector.slice(1,-1)));
     const state = { language:'ja', data:[{id:1,value:'東京',amount:null}], page:3, pageSize:100, search:[{path:'$[0].value'}], files:[{id:'one',raw:'9007199254740993'}], activeId:'one' };
     const document = { documentElement:{lang:'ja'}, querySelectorAll:all };
-    const context = vm.createContext({document,state,APP_CONFIG:config,I18N:translations,$:get,$$:all,renderActive(){},renderFileManager(){},getActiveFile(){return state.files[0];},renderFileStatus(){},renderOverview(){},renderFields(){},renderColumnsDialog(){},renderDataTable(){},renderSide(){},renderResults(){},updateButtons(){}});
+    const context = vm.createContext({document,state,APP_CONFIG:config,I18N:translations,$:get,$$:all,renderActive(){},renderFileManager(){},getActiveFile(){return state.files[0];},renderFileStatus(){},renderOverview(){},renderFields(){},renderColumnsDialog(){},renderDataTable(){},renderSide(){},renderResults(){},updateButtons(){},BrowserKittyUI:{setSaveStatus(){},text(){return "";}},refreshCsvActions(){},renderCellLanguage(){}});
     vm.runInContext(`let language='ja';const lastDiff={summary:{changed:1},rows:[{path:'id',changes:['type']}]}; function t(key,vars={}){return String(I18N[${schema?'language':'state.language'}][key]??key).replace(/\\{(\\w+)\\}/g,(_,k)=>vars[k]??'');} ${applySource};globalThis.switchTo=next=>{language=next;state.language=next;${functionName}();};`,context);
     return {get,nodes,state,document,switchTo:context.switchTo};
   }

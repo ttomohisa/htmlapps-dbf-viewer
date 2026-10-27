@@ -142,3 +142,9 @@ Bug reports and feature proposals are welcome through GitHub Issues. See [CONTRI
 Copyright © 2026 ttomohisa
 
 Licensed under the [MIT License](LICENSE).
+
+### Session, CSV scope and language
+
+Files and view settings live only in this tab and disappear on reload or close; they are not autosaved. Closing a source tab leaves the original DBF/DBT/FPT untouched. CSV actions show source, current page, visible row/column count and UTF-8 format. Edit the filename before saving. Busy controls prevent duplicate clicks, and failures remain visible with recovery guidance. “Download started” confirms handoff to the browser, not completion on disk.
+
+Language follows URL ?lang=ja / ?lang=en, the shared Browser Kitty preference, the legacy tool preference, browser languages, then English. Explicit switching remembers the shared preference when storage is available and preserves the open inspector, pending work and view settings. If storage is blocked, the screen still switches and reports that the preference applies only here. Shared preferences are limited to the same origin; file URLs do not guarantee sharing between HTML files.

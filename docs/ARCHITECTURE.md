@@ -108,3 +108,7 @@ Keep source in one HTML while it remains understandable. When an app grows subst
 - No runtime external resource.
 - Clear state ownership.
 - A build that fails on missing input.
+
+## Shared UI v1 embedding
+
+The builder dot-sources scripts/embed-ui-conventions.ps1 and replaces __BK_UI_JS__ and __BK_UI_CSS__ once, after verifying components/ui-conventions.lock.json. Exact 1.0.0 assets come from htmlapps-template. Update them only through a coordinated shared-component change. App-owned CSV snapshots, parser/memo reads, close behavior and persistence stay separate from the shared presentation API. Default builds also regenerate dbf-viewer.html from the readable release. Tests execute production adapters with controlled File/clipboard/download boundaries across source, readable, root and unpacked self-extract variants; these are not native browser QA.
