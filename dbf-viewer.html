@@ -82,7 +82,7 @@
     .brand-mark svg { width: 40px; height: 40px; display: block; }
     .brand-copy { min-width: 0; }
     .brand-name { margin: 0; display: flex; align-items: center; gap: 8px; font-weight: 780; letter-spacing: -.02em; white-space: nowrap; }
-    .version-badge { padding: 2px 6px; border-radius: 999px; background: var(--surface-muted); color: var(--muted); font-size: 10px; font-weight: 720; letter-spacing: .02em; }
+    .version-badge { display: inline-flex; align-items: center; margin-left: 7px; padding: 1px 6px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-muted); color: var(--muted); font-size: 11px; font-weight: 650; vertical-align: 2px; }
     .brand-meta { margin: 1px 0 0; color: var(--muted); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .header-actions { display: flex; align-items: center; gap: 8px; }
     .language-button,.icon-button {
@@ -95,6 +95,8 @@
     .language-button:hover,.icon-button:hover { background: var(--surface-hover); }
     .icon-button { display: grid; place-items: center; width: 38px; height: 38px; padding: 0; }
     .icon-button svg { width: 20px; height: 20px; }
+    .dialog-close { display: grid; place-items: center; width: 34px; height: 34px; border: 0; border-radius: 9px; background: transparent; cursor: pointer; }
+    .dialog-close svg { width: 18px; height: 18px; }
     .main { width: min(1180px,calc(100% - 32px)); margin: 0 auto; padding: 28px 0 54px; }
     .page-intro { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding-bottom: 20px; }
     .page-intro h1 { margin: 0; font-size: clamp(24px,3vw,34px); line-height: 1.18; letter-spacing: -.04em; }
@@ -104,16 +106,17 @@
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      min-height: 34px;
-      padding: 7px 10px;
-      border: 1px solid color-mix(in srgb,var(--accent) 24%,var(--line));
-      border-radius: 999px;
-      background: var(--accent-soft);
+      margin-top: 3px;
+      padding: 7px 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
       color: var(--accent);
       font-size: 12px;
-      font-weight: 760;
+      font-weight: 500;
+      white-space: nowrap;
     }
-    .local-badge svg { width: 17px; height: 17px; }
+    .local-badge svg { width: 15px; height: 15px; }
     .shell { border: 1px solid var(--line); border-radius: 16px; background: var(--surface); box-shadow: var(--shadow-sm); }
     .drop-shell { padding: 18px; }
     .dropzone {
@@ -325,7 +328,7 @@
     .column-option span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
     .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
     .mobile-bottom-bar { display: none; }
-    .footer { padding: 12px 4px 0; display: flex; justify-content: center; color: var(--muted); font-size: 10px; }
+    .footer { padding: 12px 4px 0; display: flex; justify-content: flex-start; color: var(--muted); font-size: 12px; }
     .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
     @media (max-width: 860px) {
       .summary-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
@@ -600,7 +603,7 @@
   </div>
 
   <dialog id="helpDialog" aria-labelledby="helpTitle">
-    <div class="dialog-header"><h2 id="helpTitle" data-i18n="helpTitle">使い方と注意事項</h2><button class="icon-button" id="closeHelpButton" type="button" data-i18n-aria-label="close" aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+    <div class="dialog-header"><h2 id="helpTitle" data-i18n="helpTitle">使い方と注意事項</h2><button class="dialog-close" id="closeHelpButton" type="button" data-i18n-aria-label="close" aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
     <div class="dialog-body">
       <!-- APP:HELP:BEGIN -->
       <h3 data-i18n="helpBasicsTitle">基本操作</h3>
@@ -651,7 +654,7 @@
       'use strict';
 
       const APP_CONFIG = {"$schema":"./schemas/app-config.schema.json","name":"DBF Viewer","nameJa":"DBF Viewer","slug":"dbf-viewer","version":"1.0.2","description":"Open DBF files locally in your browser and inspect fields, records, encoding, and memo data.","descriptionJa":"DBFファイルをブラウザー内で開き、フィールド構成・レコード・文字コード・メモデータを確認します。","defaultLanguage":"auto","repository":{"owner":"ttomohisa","name":"htmlapps-dbf-viewer"},"build":{"output":"dist/index.html","blockRuntimeNetwork":true,"selfExtract":{"enabled":true,"output":"dist/index.self-extract.html"},"sizeBudget":{"readableWarningMb":10,"selfExtractWarningMb":6}}};
-      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.2","generatedAtUtc":"2026-10-23T12:54:59.2099098Z","app":{"name":"DBF Viewer","slug":"dbf-viewer","version":"1.0.2"},"dependencies":[]};
+      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.2","generatedAtUtc":"2026-11-13T16:03:13.1212688Z","app":{"name":"DBF Viewer","slug":"dbf-viewer","version":"1.0.2"},"dependencies":[]};
       const assetBundle = {"schemaVersion":2,"dependencies":{}};
       const blobUrls = new Set();
       const assetByteCache = new Map();
@@ -700,7 +703,7 @@
           typeText: 'テキスト', typeNumber: '数値', typeDate: '日付', typeLogical: '真偽値', typeInteger: '整数', typeDouble: '倍精度数値', typeCurrency: '通貨', typeDateTime: '日時', typeMemo: 'メモ', typeBinary: 'バイナリ', typeUnknown: '不明', null: 'null', blank: '空', memoRef: 'Memo #{ref}', binaryMemoRef: 'Binary #{ref}', binaryBytes: '{bytes} bytes', unknownVersion: '不明 (0x{hex})',
           statusReading: '{name} を確認しています…', statusReady: '読み込みが完了しました。', fileAdded: '{name} を開きました', memoAttached: '{name} をメモファイルとして関連付けました', memoNoMatch: '対応するDBFが見つからないメモファイルがあります。DBFも一緒に追加してください。', unsupportedFiles: '対応していないファイルは読み込みませんでした。', loadFailed: '{name} を読み込めませんでした: {message}', readFailed: 'データを読み込めませんでした。', invalidTooSmall: 'DBFヘッダーとして小さすぎます。', invalidHeaderLength: 'ヘッダー長が不正です。', invalidRecordLength: 'レコード長が不正です。', invalidFields: 'フィールド定義がレコード長を超えています。', unsupportedEncoding: 'このブラウザーでは選択した文字コードを利用できません。',
           csvCopied: '現在ページのCSVをコピーしました', csvDownloaded: '現在ページのCSVを保存しました', csvFailed: 'CSVを作成できませんでした。', valueCopied: '値をコピーしました', copyFailed: 'コピーできませんでした', memoMissing: '対応するメモファイルがありません。', memoInvalid: 'メモデータを読み取れませんでした。', memoLoading: 'メモを読み込み中…', closedFile: '{name} を閉じました',
-          footer: 'DBF Viewer · 完全ローカル処理'
+          footer: 'DBF Viewer · MIT License · フィールドもレコードもブラウザー内で完結'
         },
         en: {
           brandMeta: 'Inspect DBF files in your browser', introTitle: 'Open a DBF file and inspect its contents', lead: 'Inspect field definitions and records locally in your browser. Switch text encoding when legacy text looks garbled.', localBadge: 'Fully local processing',
@@ -713,7 +716,7 @@
           typeText: 'Text', typeNumber: 'Number', typeDate: 'Date', typeLogical: 'Boolean', typeInteger: 'Integer', typeDouble: 'Double', typeCurrency: 'Currency', typeDateTime: 'Date/time', typeMemo: 'Memo', typeBinary: 'Binary', typeUnknown: 'Unknown', null: 'null', blank: 'blank', memoRef: 'Memo #{ref}', binaryMemoRef: 'Binary #{ref}', binaryBytes: '{bytes} bytes', unknownVersion: 'Unknown (0x{hex})',
           statusReading: 'Inspecting {name}…', statusReady: 'Ready.', fileAdded: 'Opened {name}', memoAttached: 'Attached {name} as the memo file', memoNoMatch: 'Some memo files have no matching DBF. Add the DBF file as well.', unsupportedFiles: 'Unsupported files were ignored.', loadFailed: 'Could not open {name}: {message}', readFailed: 'Could not load data.', invalidTooSmall: 'The file is too small to contain a DBF header.', invalidHeaderLength: 'The DBF header length is invalid.', invalidRecordLength: 'The DBF record length is invalid.', invalidFields: 'Field definitions exceed the declared record length.', unsupportedEncoding: 'This browser does not support the selected encoding.',
           csvCopied: 'Copied CSV for the current page', csvDownloaded: 'Downloaded CSV for the current page', csvFailed: 'Could not create CSV.', valueCopied: 'Copied value', copyFailed: 'Could not copy', memoMissing: 'No matching memo file is attached.', memoInvalid: 'Could not read this memo value.', memoLoading: 'Loading memo…', closedFile: 'Closed {name}',
-          footer: 'DBF Viewer · Fully local processing'
+          footer: 'DBF Viewer · MIT License · Field and record inspection stay in the browser'
         }
       };
 
